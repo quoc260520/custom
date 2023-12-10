@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ve;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChiTietThucAn;
 use App\Models\ChiTietVe;
 use App\Models\HoaDon;
 use App\Models\KhachHang;
@@ -21,33 +22,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminVeController extends Controller
 {
-    public function login(Request $request) {
-        return view('Login');
-    }
-    public function Postlogin(Request $request) {
-        $username = $request->username;
-        $password = $request->password;
-
-        // Tìm người dùng bằng tên đăng nhập
-        $user = NguoiDung::where('TenDangNhap', $username)->first();
-        if ($user!=null) {
-            if (Hash::check($password,$user->MatKhau)) {
-                if(NhanVien::where('idTK', $user->id)->first()) {
-                    Auth::guard("web")->login($user);
-                    return redirect('/');
-                }
-                Auth::guard("web")->login($user);
-                return redirect('/trangchu');
-            } else {
-                return redirect('/trangchu');
-            }
-        }
-    }
     public function index() {
-        $phim = Phim::all()->toArray();
-        $thucAn = ThucAn::all()->toArray();
-        $khachHang = KhachHang::all()->toArray();
-        return view('Login')->withPhim($phim)->withThucAn($thucAn)->withKhachHang($khachHang);
+        $phim = Phim::all();
+        $thucAn = ThucAn::all();
+        $khachHang = KhachHang::all();
+        return view('Admin.Ve.index')->withPhim($phim)->withThucAn($thucAn)->withKhachHang($khachHang);
     }
     public function layPhong(Request $request, $idPhim) {
         $phong = LichChieu::where('idPhim',$idPhim)->with('phong')->get();
@@ -59,11 +38,13 @@ class AdminVeController extends Controller
         $ngayChieu = $request->ngayChieu;
         $lichChieu = LichChieu::where('idPhim',$idPhim)->where('idPhong',$idPhong)
                                 ->whereDate('ThoiGianChieu',Carbon::parse($ngayChieu))
+                                ->orderBy('ThoiGianChieu','ASC')
+                                ->selectRaw('TIME(ThoiGianChieu) as ThoiGianChieu, TIME(ThoiGianKetThuc) as ThoiGianKetThuc, idPhong,idLichChieu, idPhim')
                                 ->get();
         return $lichChieu;
     }
     public function layGhe(Request $request, $idLichChieu) {
-        $lichChieu = LichChieu::find($idLichChieu);
+        $lichChieu = LichChieu::with('phong','phim')->find($idLichChieu);
         $ve = Ve::where('idLichChieu', $idLichChieu)->get();
         return [
             'lichChieu' => $lichChieu,
@@ -75,29 +56,71 @@ class AdminVeController extends Controller
             $manv = NhanVien::where('idTK', Auth::user()->id)->first()->idNhanVien;
             $lichChieu = LichChieu::with('phim')->find($request->idLichChieu);
             $giaVe = $lichChieu->phim->DonGia;
+            $tongHD = 0;
+            $tongSL = 0;
             DB::beginTransaction();
                 $hoaDon = HoaDon::create([
-                    'MAKHACHHANG' => $request->mahk,
+                    'MAKHACHHANG' => null,
                     'MANHANVIEN'=>  $manv,
-                    'TONGTIEN'=>  $request->tongtien,
-                    'GHICHU'=>  $request->ghichu,
-                    'TONGSL' =>  $request->ghichu,
+                    'TONGTIEN'=>  $request->tongTien,
+                    'GHICHU'=>  "",
+                    'TONGSL' =>  0,
                     'NGAYTAO' =>  now(),
                     'TinhTrang' =>  1,
                     'TRANGTHAI' =>  1,
                 ]);
-                $ve = Ve::create([
-                    'idLichChieu' => $request->idLichChieu,
-                    'MaGheNgoi' => $request->maGheNgoi,
-                ]);
-                $ctve = ChiTietVe::create([
-                    'idVe' => $ve->idVe,
-                    'MAHOADON' => $hoaDon->MAHOADON,
-                    'GiaVe' => $giaVe,
+                foreach(json_decode($request->maVe) as $maVe) {
+                    $check = Ve::where('idLichChieu', $request->idLichChieu)->where('MaGheNgoi', $maVe)->count();
+                    if($check > 0) {
+                        DB::rollBack();
+                        return response()->json([
+                            'errors' => ['Vé phim đã được đặt',]
+                        ],500);
+                    }
+                    $ve = Ve::create([
+                        'idLichChieu' => $request->idLichChieu,
+                        'MaGheNgoi' => $maVe,
+                    ]);
+                    $ctve = ChiTietVe::create([
+                        'idVe' => $ve->idVe,
+                        'MAHOADON' => $hoaDon->MAHOADON,
+                        'GiaVe' => $giaVe,
+                    ]);
+                    $tongHD  += (int)$giaVe;
+                    $tongSL += 1;
+                }
+                foreach ($request->maDoAn ?? [] as $ma){
+                    $thucAn = ThucAn::find($ma);
+                    $sl = (int)$request->maDoAn_.$ma;
+                    ChiTietThucAn::create([
+                        'MATHUCAN' => $ma,
+                        'MAHOADON' => $hoaDon->MAHOADON,
+                        'SOLUONG' => $sl
+                    ]);
+                    $tongHD  += $sl * (int)$thucAn->DONGIA;
+                    $tongSL += $sl;
+                }
+                $hoaDon->update([
+                    'TONGTIEN'=>  $tongHD,
+                    'TONGSL' =>  $tongSL,
                 ]);
             DB::commit();
+            return response()->json([
+                'message' => "Tạo hóa đơn thành công",
+                'id' => $hoaDon->MAHOADON
+
+            ],200);
         } catch (\Exception $e) {
             DB::rollBack();
+            return response()->json([
+                'errors' => ['Đã có lỗi xảy ra',]
+            ],500);
         }
+    }
+    public function layHoaDon($idHoaDon) {
+        $hoaDon = HoaDon::where('MAHOADON', $idHoaDon)
+        ->with('chiTietVe.ve.lichChieu.phong', 'chiTietVe.ve.lichChieu.phim', 'chiTietThucAn.thucAn', 'nhanVien')
+        ->first();
+        return view('Admin.Ve.HoaDon')->withHoaDon($hoaDon);
     }
 }

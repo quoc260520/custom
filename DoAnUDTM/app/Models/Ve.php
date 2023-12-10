@@ -15,6 +15,9 @@ class Ve extends Model
         'idVe',
         'idLichChieu',
         'MaGheNgoi',
-
     ];
+    public function lichChieu()
+    {
+        return $this->belongsTo(LichChieu::class, 'idLichChieu', 'idLichChieu');
+    }
 }

@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ChiTietVe extends Model
+class ChiTietThucAn extends Model
 {
     use HasFactory;
-    protected $table = "chitietve";
+    protected $table = "chitietthucan";
     protected $primaryKey = 'MACT';
     public $timestamps = false;
     protected $fillable = [
         'MACT',
-        'idVe',
+        'MATHUCAN',
         'MAHOADON',
-        'GiaVe'
+        'SOLUONG'
     ];
-    public function ve()
+    public function thucAn()
     {
-        return $this->belongsTo(Ve::class, 'idVe', 'idVe');
+        return $this->belongsTo(ThucAn::class, 'MATHUCAN', 'MATHUCAN');
     }
 }

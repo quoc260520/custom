@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf_token" content="{{ csrf_token() }}" />
     <title>Quản lý Rạp Chiếu Phim </title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/Content/admin/images/favicon.png') }}">
@@ -15,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('assets/Content/admin/vendor/chartist/css/chartist.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/Content/admin/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/Content/admin/vendor/datatables/css/jquery.dataTables.min.css') }}">
-    
+<meta name="csrf_token" content="{{ csrf_token() }}" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         label{
@@ -126,7 +127,7 @@
                     <li class="nav-label first">Main Menu</li>
                     <!-- <li><a href="index.html"><i class="icon icon-single-04"></i><span class="nav-text">Dashboard</span></a>
                     </li> -->
-                   
+
 
                     <li class="nav-label">Quản Lý hệ thống</li>
                     <li>
@@ -157,6 +158,16 @@
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="/phongchieu">Quảhn lý Phòng</a></li>
+
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-chart-bar-33"></i><span class="nav-text">Vé </span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="/admin/dat-ve">Quản lý vé</a></li>
 
 
                         </ul>
@@ -230,15 +241,15 @@
             $('#dataTables-phim').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "idPhim"
                 }, {
@@ -248,7 +259,7 @@
                     "data": "ApPhich",
                     render: function (data) {
                         return "<img src='/assets/Content/Upload/Image/" + data + "'   height='150'>";
-  
+
                     }
                 },
                 {
@@ -260,9 +271,9 @@
                 },
                 {
                     "data": "NgayKhoiChieu",
-                
+
                 },
-                
+
                 {
                     "data": "NamSX"
                 },
@@ -295,7 +306,7 @@
                 $.ajax({
                     url: '/api/delete_phim/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -314,22 +325,22 @@
             $('#dataTables-chucvu').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/chucvu',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "idCV"
                 }, {
                     "data": "TenChucVu"
                 },
-        
-               
+
+
                 {
                     "data": "idCV",
                     render: function (data, type, row) {
@@ -344,7 +355,7 @@
                 },
                 ],
             });
-            
+
 
         });
 
@@ -353,7 +364,7 @@
                 $.ajax({
                     url: '/api/delete_chucvu/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -372,22 +383,22 @@
             $('#dataTables-theloai').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/theloai',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "idTheLoai"
                 }, {
                     "data": "TenTheLoai"
                 },
-        
-               
+
+
                 {
                     "data": "idTheLoai",
                     render: function (data, type, row) {
@@ -402,7 +413,7 @@
                 },
                 ],
             });
-            
+
 
         });
 
@@ -411,7 +422,7 @@
                 $.ajax({
                     url: '/api/delete_theloai/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -430,22 +441,22 @@
             $('#dataTables-manhinh').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/manhinh',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "idMH"
                 }, {
                     "data": "TenMH"
                 },
-        
-               
+
+
                 {
                     "data": "idMH",
                     render: function (data, type, row) {
@@ -460,7 +471,7 @@
                 },
                 ],
             });
-            
+
 
         });
 
@@ -469,7 +480,7 @@
                 $.ajax({
                     url: '/api/delete_manhinh/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -488,15 +499,15 @@
             $('#dataTables-thucan').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/thucan',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "MATHUCAN"
                 }, {
@@ -505,8 +516,8 @@
                 , {
                     "data": "DONGIA"
                 },
-        
-               
+
+
                 {
                     "data": "MATHUCAN",
                     render: function (data, type, row) {
@@ -521,7 +532,7 @@
                 },
                 ],
             });
-            
+
 
         });
 
@@ -530,7 +541,7 @@
                 $.ajax({
                     url: '/api/delete_thucan/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -549,15 +560,15 @@
             $('#dataTables-dienvien').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/dienvien',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "MADV"
                 }, {
@@ -569,7 +580,7 @@
                 {
                     "data": "TenPhim"
                 },
-               
+
                 {
                     "data": "MADV",
                     render: function (data, type, row) {
@@ -584,7 +595,7 @@
                 },
                 ],
             });
-            
+
 
         });
 
@@ -593,7 +604,7 @@
                 $.ajax({
                     url: '/api/delete_dienvien/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -612,15 +623,15 @@
             $('#dataTables-khachhang').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/khachhang',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "idKH"
                 }, {
@@ -652,7 +663,7 @@
                 },
                 ],
             });
-            
+
 
         });
 
@@ -661,7 +672,7 @@
                 $.ajax({
                     url: '/api/delete_khachhang/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -680,15 +691,15 @@
             $('#dataTables-phong').dataTable({
                 "processing": true,
                 "serverSide": false,
-  
+
                 "ajax": {
                     "url": '/api/phongchieu',
                     "type": 'get',
                     "datatype": 'json',
-                
+
                     "dataSrc": ""
                 },
-  
+
                 "columns": [{
                     "data": "idPhongChieu"
                 }, {
@@ -725,7 +736,7 @@
                 },
                 ],
             });
-            
+
 
         });
 
@@ -734,7 +745,7 @@
                 $.ajax({
                     url: '/api/delete_phongchieu/'+data,
                     type: "GET",
-                  
+
                     success: function (response) {
                         if (response) {
                             alert("Bạn đã xóa thành công");
@@ -759,7 +770,7 @@
                 "url": '/api/lichchieu',
                 "type": 'get',
                 "datatype": 'json',
-            
+
                 "dataSrc": ""
             },
 
@@ -792,7 +803,7 @@
             },
             ],
         });
-        
+
 
     });
 
@@ -801,7 +812,7 @@
             $.ajax({
                 url: '/api/delete_lichchieu/'+data,
                 type: "GET",
-              
+
                 success: function (response) {
                     if (response) {
                         alert("Bạn đã xóa lịch chiếu thành công");
@@ -825,7 +836,7 @@
                 "url": '/api/nhanvien',
                 "type": 'get',
                 "datatype": 'json',
-            
+
                 "dataSrc": ""
             },
 
@@ -854,7 +865,7 @@
             {
                 "data": "idChucVu"
             }
-        
+
             ,
             {
                 "data": "idNhanVien",
@@ -869,7 +880,7 @@
                 }
             },
             ],
-        });       
+        });
     });
 
     function xoaNhanVien(data) {
@@ -877,7 +888,7 @@
             $.ajax({
                 url: '/api/delete_nhanvien/'+data,
                 type: "GET",
-              
+
                 success: function (response) {
                     if (response) {
                         alert("Bạn đã xóa thành công");
@@ -901,7 +912,7 @@
                 "url": '/api/hoadon',
                 "type": 'get',
                 "datatype": 'json',
-            
+
                 "dataSrc": ""
             },
 
@@ -944,9 +955,9 @@
                     }
                 }
             }
-           
+
             ],
-        });       
+        });
     });
 
     function xoaNhanVien(data) {
@@ -954,7 +965,7 @@
             $.ajax({
                 url: '/api/delete_nhanvien/'+data,
                 type: "GET",
-              
+
                 success: function (response) {
                     if (response) {
                         alert("Bạn đã xóa thành công");

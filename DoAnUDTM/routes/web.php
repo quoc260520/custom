@@ -84,12 +84,12 @@ Route::get('/admin/phim', function () {
 });
 
 Route::get('/theloai-phim/{id}',[PhimController::class,'phimtheotheloai']);
-Route::get('/login',[AdminVeController::class,'login'])->name('login');
-Route::post('/login',[AdminVeController::class,'postLogin'])->name('post.login');
+
 Route::prefix('admin/dat-ve')->middleware('auth')->group(function () {
     Route::get('/',[AdminVeController::class,'index'])->name('admin.dat-ve');
     Route::get('lay-phong/{idPhim}',[AdminVeController::class,'layPhong'])->name('admin.lay-phong');
     Route::get('lay-lich',[AdminVeController::class,'layLich'])->name('admin.lay-phim');
     Route::get('lay-ghe/{idLichChieu}',[AdminVeController::class,'layGhe'])->name('admin.lay-ghe');
-    Route::post('dat-ve',[AdminVeController::class,'datVe'])->name('admin.post.dat-ve');
+    Route::post('/',[AdminVeController::class,'datVe'])->name('admin.post.dat-ve');
+    Route::get('hoa-don/{idHoaDon}',[AdminVeController::class,'layHoaDon'])->name('admin.hoa-don');
 });
