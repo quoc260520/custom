@@ -15,6 +15,6 @@ class Ve extends Model
         'idVe',
         'idLichChieu',
         'MaGheNgoi',
-   
+
     ];
 }

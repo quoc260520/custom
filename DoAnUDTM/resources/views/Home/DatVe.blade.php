@@ -42,7 +42,7 @@
             <div class="form-style-1 user-pro" action="#">
                 <form action="" class="user" method="get">
                     <h4>Đặt Vé Xem Phim</h4>
-                    
+
                     <div class="row">
                         <div class="col-md-6 form-it">
                             <label>Ngày Chiếu</label>
@@ -101,8 +101,8 @@
      document.getElementById('ngaychieu').addEventListener('change', function() {
          let ngay = this.value;
          let idPhim = document.getElementById('idPhim').value;
- 
-         
+
+
          $.ajax({
              url: '/phim/lichchieu/' + idPhim + '/' + ngay,
              type: 'GET',
@@ -119,7 +119,7 @@
          });
      });
 
-     let selectedSeats = []; 
+     let selectedSeats = [];
      let firstNumber=0;
      let secondNumber=0;
      document.getElementById('giochieu').addEventListener('change', function() {
@@ -137,8 +137,8 @@
                 var n = data.soGheMotHang; // Số ghế mỗi hàng
                 var dsghedaco = data.magheArray;
                 var dem = 0;
-            
-            
+
+
                 for (var i = 1; i <= m; i++) {
                     var hangGhe = document.createElement('li');
                     hangGhe.classList.add('hang-ghe');
@@ -158,10 +158,10 @@
                         } else {
                             ghe.addEventListener('click', function() {
                                 var isSelected = this.classList.toggle('ghe-chon');
-                                
+
                                 if (isSelected) {
                                     selectedSeats.push(this.innerHTML);
-                                    
+
                                 } else {
                                     var index = selectedSeats.indexOf(this.innerHTML);
                                     if (index !== -1) {
@@ -170,7 +170,7 @@
                                 }
                                 $('#thongtinve').text("");
                                 $('#thongtinve').text(selectedSeats);
-                            
+
                             });
                         }
 
@@ -179,11 +179,11 @@
                     }
 
                     gheContainer.appendChild(hangGhe);
-                    
+
                 }
             }
          });
-        
+
      });
      $('.datve').on('click', function(event) {
         event.preventDefault();
@@ -196,9 +196,9 @@
              }
          });
     });
-    
+
  });
- 
+
  </script>
 
 @endsection
