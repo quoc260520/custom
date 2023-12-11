@@ -20,29 +20,42 @@
 
 <div class="container">
     <div class="row ipad-width">
-        <div class="col-md-3 col-sm-12 col-xs-12">
+        <div class="col-md-4 col-sm-12 col-xs-12">
             <div class="user-information">
                 <div class="user-img">
                     <a href="#"> <img src="{{ asset('assets/Content/Upload/Image/' .$phim[0]->ApPhich) }}" alt=""></a>
-                </div>
-                <div class="user-fav">
-                    <h3 style="color: white">{{ $phim[0]->TenPhim }}</h3>
+                    <center> <h3 style="color: white">{{ $phim[0]->TenPhim }}</h3></center>
                     <ul>
+                        <input type="hidden" value="{{ $phim[0]->DonGia }}" id="GiaPhim">
                         <input type="hidden" value="{{ $phim[0]->idPhim }}" id="idPhim">
                         <li class="active"><a>Năm Sản Xuất :{{ $phim[0]->NamSX }}</a></li>
                         <li><a>Thể Loại: {{ $phim[0]->TenTheLoai }}</a></li>
                         <li><a>Thời Lượng: {{ $phim[0]->ThoiLuong }}(phút)</a></li>
-                        <li><a>Đạo Diễn: {{ $phim[0]->DaoDien }} </a></li>
-                        <li><a>Ngày Khởi Chiếu: {{ $phim[0]->NgayKhoiChieu }} </a></li>
                     </ul>
+                </div>
+                <div class="user-fav" style="color: aliceblue">
+                    
+                        <label for=""><h4>Thông Tin vé</h4></label> <br>
+                        <label for="">Tên Người Đặt : {{ Auth::user()->TenDangNhap }}</label><br>
+                        <label for="">Danh Sách Ghế : <br><span id="thongtinve"></span></label>
+                        <hr style="border: 1px solid black;">
+                        <label for="">Danh Sách Thức Ăn : <br>
+                        <span id="thucandachon" class="thucandachon">
+
+                        </span>
+                        </label>
+                        <br>
+                        <label for="" style="color: red">Tông Tiền: <span class="tongtien" id="tongtien"></span></label>
+                 
+                   
                 </div>
             </div>
         </div>
-        <div class="col-md-9 col-sm-12 col-xs-12">
+        <div class="col-md-8 col-sm-12 col-xs-12">
             <div class="form-style-1 user-pro" action="#">
-                <form action="" class="user" method="get">
+                <form action="/Ve/Create" class="user" method="get">
                     <h4>Đặt Vé Xem Phim</h4>
-
+                    
                     <div class="row">
                         <div class="col-md-6 form-it">
                             <label>Ngày Chiếu</label>
@@ -62,28 +75,44 @@
                     </div>
                     <div class="row" >
                         {{-- chỗ này là xuất ghế --}}
-                        <div class="col-md-8 form-it" id="danhsachghe">
+                        <div class="col-md-12 form-it" id="danhsachghe">
 
                         </div>
-                        <div class="col-md-4 form-it" >
-                            <label for="">Thông Tin vé</label>
-                            <label for="">Ghế : <span id="thongtinve"></span></label>
-                        </div>
+                        
                     </div>
                     <div class="row" >
-
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 form-it">
-                            <label>Thanh Toán </label>
-                            <div class="radio">
-                                <label><input type="radio" name="payment" value="offline" checked>Thanh Toán Toán Tại Quẩy</label>
-                            </div>
-                            <div class="radio">
-                                <label><input type="radio" name="payment" value="online">Thanh Toán MoMo</label>
-                            </div>
+                        <div class="col-md-12 form-it" id="danhsachthucan">
+                            @foreach ($thucan as $item)
+                                <div class="col-md-3 thucan" style="background-color: aqua">
+                                    <input type="checkbox" class="chonThucAn" data-mathucan="{{ $item->MATHUCAN }}" data-gia="{{ $item->DONGIA }}">
+                                    <h5 class="tenthucan">{{ $item->TENTHUCAN }}</h5>
+                                    <p>{{ $item->DONGIA }}</p>
+                                    <input type="hidden" class="mathucan" value="{{ $item->MATHUCAN }}">
+                                    <input type="number" class="soluong" value="1">
+                                </div>
+                            @endforeach
+                            
                         </div>
                     </div>
+                    <div class="row">
+                        {{-- <div class="col-md-7 form-it" id="hienthithucan">
+                            <div class="col-md-6">
+                                <label for="">Chọn Đồ Ăn</label>
+                                <select id="selectDrink">
+                                    <option value="1">Nước Ngọt</option>
+                                    <option value="2">Cà Phê</option>
+                                    <!-- Thêm các lựa chọn khác nếu cần -->
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <br>
+                                <br>
+                                <button id="addButton">Thêm</button>
+                            </div>
+                        </div> --}}
+                        
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-2">
                             <input class="submit datve" type="submit" value="Đặt vé">
@@ -101,8 +130,8 @@
      document.getElementById('ngaychieu').addEventListener('change', function() {
          let ngay = this.value;
          let idPhim = document.getElementById('idPhim').value;
-
-
+ 
+         
          $.ajax({
              url: '/phim/lichchieu/' + idPhim + '/' + ngay,
              type: 'GET',
@@ -120,6 +149,7 @@
      });
 
      let selectedSeats = [];
+     let gia=0; 
      let firstNumber=0;
      let secondNumber=0;
      document.getElementById('giochieu').addEventListener('change', function() {
@@ -137,8 +167,8 @@
                 var n = data.soGheMotHang; // Số ghế mỗi hàng
                 var dsghedaco = data.magheArray;
                 var dem = 0;
-
-
+            
+            
                 for (var i = 1; i <= m; i++) {
                     var hangGhe = document.createElement('li');
                     hangGhe.classList.add('hang-ghe');
@@ -158,19 +188,22 @@
                         } else {
                             ghe.addEventListener('click', function() {
                                 var isSelected = this.classList.toggle('ghe-chon');
-
+                                var giaghe=parseInt(document.getElementById('GiaPhim').value);
                                 if (isSelected) {
                                     selectedSeats.push(this.innerHTML);
-
+                                    gia+=giaghe;
                                 } else {
                                     var index = selectedSeats.indexOf(this.innerHTML);
                                     if (index !== -1) {
                                         selectedSeats.splice(index, 1);
+                                        gia-=giaghe;
                                     }
                                 }
                                 $('#thongtinve').text("");
                                 $('#thongtinve').text(selectedSeats);
-
+                                $('#tongtien').text("");
+                                $('#tongtien').text(gia);
+                                
                             });
                         }
 
@@ -179,27 +212,103 @@
                     }
 
                     gheContainer.appendChild(hangGhe);
-
+                    
                 }
             }
          });
-
+        
      });
-     $('.datve').on('click', function(event) {
+
+
+     let danhSachThucAnDaChon = [];
+        const tongTienElement = document.querySelector('.tongtien');
+
+        function updateUI() {
+            const thucAnDaChonElement = document.querySelector('.thucandachon');
+            let tongTien = 0;
+
+            thucAnDaChonElement.innerHTML = danhSachThucAnDaChon.map(item => {
+                const itemTongTien = item.soLuong * item.gia;
+                tongTien += itemTongTien;
+
+                return `
+                    <div>
+                        <p>Tên thức ăn: ${item.tenThucAn}  X  ${item.soLuong}</p>
+                    </div>
+                `;
+            }).join('');
+
+            tongTienElement.textContent = tongTien+gia;
+
+            const lisstdataoElement = document.querySelector('.lisstdatao');
+            lisstdataoElement.innerHTML = danhSachThucAnDaChon.map(item => {
+                const itemTongTien = item.soLuong * item.gia;
+
+                return `
+                    <div>
+                        <p>Tên thức ăn: ${item.tenThucAn}  X  ${item.soLuong}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.addEventListener('change', function(event) {
+            if (event.target.classList.contains('chonThucAn')) {
+                const selectedThucAn = event.target.closest('.thucan');
+                const maThucAn = selectedThucAn.querySelector('.mathucan').value;
+                const soLuong = selectedThucAn.querySelector('.soluong').value;
+                const gia = selectedThucAn.querySelector('.chonThucAn').getAttribute('data-gia');
+                const tenThucAn = selectedThucAn.querySelector('.tenthucan').innerText; 
+                if (event.target.checked) {
+                    danhSachThucAnDaChon.push({ maThucAn,tenThucAn, soLuong, gia: parseInt(gia) });
+                } else {
+                    danhSachThucAnDaChon = danhSachThucAnDaChon.filter(item => item.maThucAn !== maThucAn);
+                }
+
+                updateUI();
+            }
+        });
+
+        document.addEventListener('input', function(event) {
+            if (event.target.classList.contains('soluong')) {
+                const selectedThucAn = event.target.closest('.thucan');
+                const maThucAn = selectedThucAn.querySelector('.mathucan').value;
+                const soLuong = event.target.value;
+
+                const existingItemIndex = danhSachThucAnDaChon.findIndex(item => item.maThucAn === maThucAn);
+                if (existingItemIndex !== -1) {
+                    danhSachThucAnDaChon[existingItemIndex].soLuong = soLuong;
+                }
+
+                updateUI();
+            }
+        });
+//         $('.datve').on('click', function(event) {
+//     event.preventDefault();
+//     let danhSachJSON = encodeURIComponent(JSON.stringify(danhSachThucAnDaChon));
+
+//     // Chuyển đến trang mới với tham số truyền dữ liệu
+//     window.location.href = '/new-page?danhSach=' + danhSachJSON;
+// });
+$('.datve').on('click', function(event) {
         event.preventDefault();
+        let danhSachJSON = encodeURIComponent(JSON.stringify(danhSachThucAnDaChon));
         $.ajax({
-             url: '/phim/taohoadon/' + selectedSeats + '/' + secondNumber,
+             url: '/phim/taohoadon/' + selectedSeats + '/' + secondNumber+'/new-page?danhSach=' + danhSachJSON,
              type: 'GET',
              dataType: 'json',
              success: function(data) {
-                 alert("thanhcong");
+                var mahoadon=data.msg;
+                console.log(mahoadon);
+                window.location.href = '/chitietdatve/'+mahoadon;
              }
          });
     });
-
+    
  });
-
+ 
  </script>
+
 
 @endsection
 

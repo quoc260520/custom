@@ -7,7 +7,7 @@
                 <a href="index-2.html"><img class="md-logo" src="images/logo1.png" alt=""></a>
                 <img src="/assets/Content/Client/images/uploads/err-img.png" alt="">
                 <h1>Bạn Phải đăng Nhập hoặc không có Quyền truy Cập trang này</h1>
-                <a href="/Home" class="redbtn">go home</a>
+                <a href="/" class="redbtn">go home</a>
             </div>
         </div>
     </div>

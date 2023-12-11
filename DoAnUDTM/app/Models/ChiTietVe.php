@@ -17,8 +17,4 @@ class ChiTietVe extends Model
         'MAHOADON',
         'GiaVe'
     ];
-    public function ve()
-    {
-        return $this->belongsTo(Ve::class, 'idVe', 'idVe');
-    }
 }

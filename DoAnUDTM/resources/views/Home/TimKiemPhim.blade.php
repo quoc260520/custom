@@ -29,7 +29,7 @@
                                     <a href="{{ route('detailphim',['id'=>$item->idPhim]) }}">Chi Tiết<i class="ion-android-arrow-dropright"></i> </a>
                                 </div>
                                 <div class="mv-item-infor">
-                                    <h6><a href="/Phims/DetatilPhims?id=@item.Id &&Name=@item.TenPhim+@item.TenPhim+@item.NgayCongChieu">@item.TenPhim</a></h6>
+                                    <h6><a href="">{{ $item->TenPhim }}</a></h6>
                                     <p class="rate"><i class="ion-android-star"></i><span>8.1</span> /10</p>
                                 </div>
                             </div>

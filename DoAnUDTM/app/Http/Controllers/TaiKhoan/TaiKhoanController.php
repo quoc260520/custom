@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\HoaDon;
+use App\Models\KhachHang;
 use App\Models\NguoiDung;
 use App\Models\TaiKhoan;
 use Illuminate\Support\Facades\Session;
@@ -20,23 +22,23 @@ class TaiKhoanController extends Controller
     {
         $tenDangNhap = $req->usernamelogin;
         $matKhau = $req->passwordlogin;
-
+       
         // Tìm người dùng bằng tên đăng nhập
         $user = NguoiDung::where('TenDangNhap', $tenDangNhap)->first();
-
+        
         if ($user!=null) {
-
-            if (Hash::check($matKhau,$user->MatKhau)) {
+           
+            if (Hash::check($matKhau,$user->MatKhau)) {            
                 Auth::guard("web")->login($user);
-
-                return redirect('/trangchu');
+                
+                return redirect('/');
 
                 // return view("Home.TrangChu",["user"=>Auth::guard("web")->user()]);
             } else {
-
-                return redirect('/fhsjhkhd');
+                
+                return redirect('/not');
             }
-        }
+        } 
     }
 
     /**
@@ -46,14 +48,22 @@ class TaiKhoanController extends Controller
      */
     public function create(Request $req)
     {
-        $tendangky=$req->UserName;
-        $mk = bcrypt($req->Pass);
-        DB::table('taikhoan')->insert([
+        $tendangky=$req->tendangnhap;
+        $mk = bcrypt($req->matkhau);
+        
+        $taikhoan = NguoiDung::create([
             'TenDangNhap' => $tendangky,
-            'MatKhau' =>$mk,
-
+            'MatKhau' => $mk,
+            'TinhTrang'=>0
         ]);
-        return redirect('/trangchu');
+            $phim = new KhachHang();
+            $phim->HoTen=$req->hoten;
+            $phim->SDT=$req->sdt;
+            $phim->Email=$req->email;
+            $phim->idTK=$taikhoan->id;
+            $phim->save();
+
+        return redirect('/');
     }
 
     /**
@@ -65,8 +75,8 @@ class TaiKhoanController extends Controller
     public function dangxuat()
     {
         Auth::guard("web")->logout(); // Đăng xuất người dùng
-
-        return redirect('/trangchu'); // Chuyển hướng về trang chính hoặc trang đăng nhập
+      
+        return redirect('/'); // Chuyển hướng về trang chính hoặc trang đăng nhập
     }
     public function store(Request $request)
     {
@@ -83,22 +93,22 @@ class TaiKhoanController extends Controller
     {
         $tenDangNhap = $req->UserName;
         $matKhau = $req->Pass;
-
+        
         // Tìm người dùng bằng tên đăng nhập
         $user = NguoiDung::where('TenDangNhap', $tenDangNhap)->first();
         dd("óiad");
         if ($user!=null) {
-            if (Hash::check($matKhau,$user->MatKhau)) {
+            if (Hash::check($matKhau,$user->MatKhau)) {            
 
                 Auth::guard("web")->login($user);
-
+            
                 dd(Auth::user()->TenDangNhap);
                 return redirect('/');
             } else {
-
+                
                 return redirect('/');
             }
-        }
+        } 
     }
 
     /**

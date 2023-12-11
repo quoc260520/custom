@@ -29,13 +29,13 @@ class NhanVienController extends Controller
     public function get_create()
     {
         $chucvu=ChucVu::all();
-        return view('Admin.Home.create_phim',['chucvu'=>$chucvu]);
+        return view('NhanVien.NhanVien_create',['chucvu'=>$chucvu]);
     }
     public function get_update($id)
     {
         $kh=NhanVien::where('idNhanVien',$id)->get();
         $chucvu=ChucVu::all();
-        return view('Admin.Home.update_phim',['nhanvien'=>$kh,'chucvu'=>$chucvu]);
+        return view('NhanVien.NhanVien_update',['nhanvien'=>$kh,'chucvu'=>$chucvu]);
     }
     public function create(Request $request)
     {

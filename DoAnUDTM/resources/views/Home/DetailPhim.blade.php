@@ -36,8 +36,6 @@
                                 <div><a href="{{ route('errorpage') }}" class="item item-2 yellowbtn"><i class="ion-card"></i></a></div>
                             @endif
                            
-                                
-                            
                         </div>
                     </div>
                 </div>

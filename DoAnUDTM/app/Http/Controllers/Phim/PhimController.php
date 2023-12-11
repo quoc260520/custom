@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Phim;
 use App\Models\PhongChieu;
 use App\Models\TheLoai;
+use App\Models\ThucAn;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -82,8 +83,9 @@ class PhimController extends Controller
         ->whereDate('ThoiGianChieu', '>=', $ngayHienTai) 
         ->distinct('NgayChieu')
         ->get();
+        $thucan=ThucAn::all();
         // return $lichChieus;
-        return view('Home.DatVe',['phim'=>$phim,'lichchieu'=>$lichChieus]);
+        return view('Home.DatVe',['phim'=>$phim,'lichchieu'=>$lichChieus,'thucan'=>$thucan]);
     }
     public function laycacxuatchieu($idphim,$ngay)
     {
@@ -134,6 +136,7 @@ class PhimController extends Controller
             $phim->Trailerr=$request->Trailerr;
             $phim->idTheLoai=$request->idTheLoai;
             $phim->idMH=$request->idMH;
+            $phim->DonGia=$request->DonGia;
             if ($request->file('anh')) {
                 $file = $request->file('anh');
                 $filename = $file->getClientOriginalName();
@@ -204,6 +207,7 @@ class PhimController extends Controller
             $phim->NamSX=$request->NamSX;
             $phim->idTheLoai=$request->idTheLoai;
             $phim->idMH=$request->idMH;
+            $phim->DonGia=$request->DonGia;
             if ($request->file('anh')) {
                 $file = $request->file('anh');
                 $filename =$file->getClientOriginalName();

@@ -118,14 +118,16 @@
         }
     });
 </script> --}}
-<script type="text/javascript">
+{{-- <script type="text/javascript">
     $('#registerForm').on('submit', function checkLogin(e) {
     e.preventDefault();
 
-    let UserName = $('#username-2').val();
- 
-    let Pass = $('#password-2').val();
-    var repassword = $('#repassword-2').val();
+    let UserName = $('#tendangnhap').val();
+    let HoTen=$('#hoten').val();
+    let Email=$('#email').val();
+    let SDT =$('#sdt').val();
+    let Pass = $('#matkhau').val();
+    var repassword = $('#rqmatkhau').val();
 
     console.log('Username:', UserName); // Kiểm tra giá trị của username ở đây
     console.log('mk:', Pass); 
@@ -136,7 +138,7 @@
             url: "{{ route('sigin') }}",
             type: "POST",
             data: {
-                UserName: UserName,
+                UserName: UserName,HoTen:HoTen,Email:Email,SDT:SDT
                 Pass: Pass,
     
             },
@@ -150,7 +152,7 @@
             })
         }
     });
-</script>
+</script> --}}
 <script type="text/javascript">
     $(document).ready(function () {
         var modal = $('.modal');
@@ -189,7 +191,7 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: '/api/theloai',
+            url: '/api/theloai-trangchu',
             type: "GET",
             dataType: 'json',
                 success: function (response) {

@@ -183,25 +183,42 @@
         <div class="login-content">
             <a href="#" class="close">x</a>
             <h3>Đăng Ký</h3>
-            <form action="" method="post" id="registerForm">
+            <form action="{{ route('sigin') }}" method="post" id="registerForm">
                 @csrf
                 <div class="row">
                     <label for="username-2">
-                        Tên Người Dùng
-                        <input type="text" name="username" id="username-2" placeholder="Tên Người Dùng" required="required" />
+                        Tên Đăng Nhập
+                        <input type="text" name="tendangnhap" id="tendangnhap" placeholder="Tên Đăng Nhập" required="required" />
                     </label>
                 </div>
-               
+                <div class="row">
+                    <label for="username-2">
+                        Họ Tên Người Dùng
+                        <input type="text" name="hoten" id="hoten" placeholder="Họ Tên Người Dùng" required="required" />
+                    </label>
+                </div>
+                <div class="row">
+                    <label for="username-2">
+                        Email
+                        <input type="text" name="email" id="email" placeholder="Email" required="required" />
+                    </label>
+                </div>
+                <div class="row">
+                    <label for="username-2">
+                        Số Điện Thoại
+                        <input type="text" name="sdt" id="sdt" placeholder="Số điện Thoại" required="required" />
+                    </label>
+                </div>
                 <div class="row">
                     <label for="password-2">
                         Mật Khẩu
-                        <input type="password" name="password" id="password-2" placeholder="" required="required" />
+                        <input type="password" name="matkhau" id="matkhau" placeholder="" required="required" />
                     </label>
                 </div>
                 <div class="row">
                     <label for="repassword-2">
                         Nhập Lại Mật Khẩu
-                        <input type="password" name="password" id="repassword-2" placeholder="" required="required" />
+                        <input type="password" name="rqmatkhau" id="rqmatkhau" placeholder="" required="required" />
                     </label>
                 </div>
                 
@@ -229,7 +246,7 @@
                                 <span></span>
                             </div>
                         </div>
-                        <a href="./Home/Content/Client/index-2.html"><img class="logo" src="{{ asset('assets/Content/Client/images/logo1.png') }}" alt="" width="119" height="58"></a>
+                        <a href="/"><img class="logo" src="{{ asset('assets/Content/Client/images/logo1.png') }}" alt="" width="119" height="58"></a>
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse flex-parent" id="bs-example-navbar-collapse-1">
@@ -265,40 +282,13 @@
                                   
                                 </ul>
                             </li>
-                            <li class="dropdown first">
-                                <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
-                                    news <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </a>
-                                <ul class="dropdown-menu level1">
-                                    <li><a href="./Home/Content/Client/bloglist.html">blog List</a></li>
-                                    <li><a href="./Home/Content/Client/bloggrid.html">blog Grid</a></li>
-                                    <li class="it-last"><a href="./Home/Content/Client/blogdetail.html">blog Detail</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown first">
-                                <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
-                                    community <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </a>
-                                <ul class="dropdown-menu level1">
-                                    <li><a href="./Home/Content/Client/userfavoritegrid.html">user favorite grid</a></li>
-                                    <li><a href="./Home/Content/Client/userfavoritelist.html">user favorite list</a></li>
-                                    <li><a href="./Home/Content/Client/userprofile.html">user profile</a></li>
-                                    <li class="it-last"><a href="./Home/Content/Client/userrate.html">user rate</a></li>
-                                </ul>
-                            </li>
+                            
                         </ul>
                         <ul class="nav navbar-nav flex-child-menu menu-right">
-                            <li class="dropdown first">
-                                <a class="btn btn-default dropdown-toggle lv1" data-toggle="dropdown" data-hover="dropdown">
-                                    pages <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </a>
-                                <ul class="dropdown-menu level1">
-                                    <li><a href="./Home/Content/Client/landing.html">Landing</a></li>
-                                    <li><a href="./Home/Content/Client/404.html">404 Page</a></li>
-                                    <li class="it-last"><a href="./Home/Content/Client/comingsoon.html">Coming soon</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./Home/Content/Client/#">Help</a></li>
+                            @if (Auth::user())
+
+                                <li><a href="./Home/Content/Client/#">Lịch Sử Mua Hàng</a></li>    
+                            @endif
                             @if (Auth::user())
                                    
                                    <li class=""><a href="./Home/Content/Client/#">{{ Auth::user()->TenDangNhap }}</a></li>

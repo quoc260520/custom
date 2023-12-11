@@ -117,7 +117,14 @@
                                         </div>
                                     </div>
                                 </div>
-                      
+                                <div class="form-group">
+                                    <label class="col-md-2" for="TenPhim">Đơn Giá</label>
+                                    <div class="col-md-10">
+                                        <div class="">
+                                            <input class="form-control text-box single-line" type="number" id="DonGia" value="{{ $phim[0]->DonGia }}" name="DonGia" placeholder="Nhập Giá">
+                                        </div>
+                                    </div>
+                                </div>
                                 
                                 <button type="submit">Cập Nhật</button>
                             </form>

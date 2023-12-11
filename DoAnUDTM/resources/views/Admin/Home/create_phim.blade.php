@@ -1,13 +1,19 @@
 @extends('Admin.Home.index')
 @section('content')
 
+<style>
+    td{
+        color: black;
+        font-weight: bold;
+    }
 
+</style>
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-12 p-md-0">
                 <div class="welcome-text">
-                    <center><h4> Trang Thêm Nhân Viên</h4></center>
+                    <center><h4> Trang Thêm Lịch Chiếu</h4></center>
                   
                 </div>
             </div>
@@ -23,105 +29,80 @@
                             
                             <form id="create-phim-form" method="POST" action="" enctype="multipart/form-data">
                                 @csrf
-                                
-                                <input type="hidden" id="" value="" name="idKH" placeholder="Mã Khách Hàng">
-                                <br>
-                                <center><h3>Thông Tin Tài Khoản Nhân Viên</h3></center>
                                 <div class="form-group">
-                                    <label class="col-md-2" for="">Tên Đăng Nhập </label>
+                                    <label class="col-md-2" for="">Ngày Chiếu </label>
                                     <div class="col-md-10">
                                         <div class="">
-                                            <input class="form-control text-box single-line" type="text" id="TenDangNhap" value="" name="TenDangNhap" placeholder="Tên Đăng Nhập">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="">Mật Khẩu </label>
-                                    <div class="col-md-10">
-                                        <div class="">
-                                            <input class="form-control text-box single-line" type="password" id="MatKhau" value="" name="MatKhau" placeholder="Mật Khẩu">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="">Nhập Lại Mật Khẩu </label>
-                                    <div class="col-md-10">
-                                        <div class="">
-                                            <input class="form-control text-box single-line" type="password" id="rqMatKhau" value="" name="rqMatKhau" placeholder="Nhập Lại Mật Khẩu">
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
-                                <center><h3>Thông Tin Nhân Viên</h3></center>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="">Tên Nhân Viên </label>
-                                    <div class="col-md-10">
-                                        <div class="">
-                                            <input class="form-control text-box single-line" type="text" id="HoTen" value="" name="HoTen" placeholder="Tên  Nhân Viên">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="TenTheLoai">Ngày Sinh</label>
-                                    <div class="col-md-10">
-                                        <div class="">
-                                            <input class="form-control text-box single-line" type="date" id="NgaySinh" value="" name="NgaySinh" placeholder="Ngày Sinh">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="TenTheLoai">Số Điện Thoại</label>
-                                    <div class="col-md-10">
-                                        <div class="">
-                                            <input class="form-control text-box single-line" type="text" id="SDT" value="" name="SDT" placeholder="Số Điện Thoại">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="TenTheLoai">Địa Chỉ</label>
-                                    <div class="col-md-10">
-                                        <div class="">
-                                            <input class="form-control text-box single-line" type="text" id="DiaChi" value="" name="DiaChi" placeholder="Địa Chỉ">
+                                            <input type="hidden" id="idLichChieu" value="" name="idLichChieu" placeholder="Mã Lịch Chiếu">
+                                            <input class="form-control text-box single-line" type="datetime-local" id="ThoiGianChieu" name="ThoiGianChieu" step="any">
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label class="col-md-2" for="TenTheLoai">Email</label>
+                                    <label class="col-md-2" for="">Chọn Phim</label>
                                     <div class="col-md-10">
-                                        <div class="">
-                                            <input class="form-control text-box single-line" type="text" id="Email" value="" name="Email" placeholder="Nhập Email">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="TenPhim">Chọn Chức Vụ</label>
-                                    <div class="col-md-10">
-                                        <select class="form-control" id="mySelect" name="idChucVu">
-                                            <option value="0">___Chọn Chức Vụ___</option>
-                                            @foreach ($chucvu as $item)
-                                                <option value="{{ $item->idCV }}">{{ $item->TenChucVu }}</option>
+                                        <select class="form-control text-box single-line" id="idPhim" name="idPhim">
+                                            <option value="0">_____Chọn Phim_____</option>
+                                            @foreach ($phim as $item)
+                                                <option value="{{ $item->idPhim }}">{{ $item->TenPhim }}</option>
                                             @endforeach
                                         </select>
-                                    
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-2" for="TenTheLoai">Giới Tính</label>
+
+                                {{-- <div class="form-group">
+                                    <label class="col-md-2" for="TenTheLoai">Thông Tin Bộ Phim</label>
                                     <div class="col-md-10">
-                                        <div class="">
-                                            <label>
-                                                <input type="radio" name="gioitinh" value="Nam">
-                                                Nam
-                                              </label>
-                                              <label>
-                                                <input type="radio" name="gioitinh" value="Nu">
-                                                Nữ
-                                              </label>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <img src="" width="162" height="240" alt="">  
+                                            </div>
+                                            <div class="col-md-3" >
+                                                <label for="">Tên Phim</label><br>
+                                                <label for="">Thời Lượng</label><br>
+                                                <label for="">Ngày khởi Chiếu</label><br>
+                                                <label for="">Thể Loại Phim</label><br>
+                                                <label for="">Định Dạng Phim</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="container">
+                                                    <center><h3>Danh Sách Lịch Chiếu Phim : <span style="color: red">Bảy Viên Ngọc Rồng</span> </h3></center> <br>
+                                                    <label for="">Ngày Chiếu : 2023-12-22  Giờ Chiếu : 12:00->14:00 Phòng Chiếu : PC01</label>
+                                                    <label for="">Ngày Chiếu : 2023-12-22  Giờ Chiếu : 12:00->14:00 Phòng Chiếu : PC01</label>
+                                                    <label for="">Ngày Chiếu : 2023-12-22  Giờ Chiếu : 12:00->14:00 Phòng Chiếu : PC01</label>
+                                                    <label for="">Ngày Chiếu : 2023-12-22  Giờ Chiếu : 12:00->14:00 Phòng Chiếu : PC01</label>
+                                                    <label for="">Ngày Chiếu : 2023-12-22  Giờ Chiếu : 12:00->14:00 Phòng Chiếu : PC01</label>
+                                                    <label for="">Ngày Chiếu : 2023-12-22  Giờ Chiếu : 12:00->14:00 Phòng Chiếu : PC01</label>
+                                                    <label for="">Ngày Chiếu : 2023-12-22  Giờ Chiếu : 12:00->14:00 Phòng Chiếu : PC01</label>
+                                                </div>
+                                            </div>
                                         </div>
+                                        
                                     </div>
+                                </div> --}}
+
+                                <div class="form-group">
+                                    <label class="col-md-2" for="">Chọn Phòng Chiếu</label>
+                                    <div class="col-md-10">
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                              <tr>
+                                                <th scope="col">Mã Phòng </th>
+                                                <th scope="col">Tên Phòng</th>
+                                                <th scope="col">Chọn</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody id="phim-list">
+                                            </tbody>
+                                          </table>
+                                    </div>
+                                    
                                 </div>
-                                <button type="submit">Thêm</button>
+                                
+                                
+                                
+                                <button type="submit" class="add">Thêm</button>
                             </form>
 
                         </div>
@@ -133,29 +114,94 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('#create-phim-form').on('submit', function(event) {
-            event.preventDefault();
-            let formData = new FormData(this);
+     let idphong; // Biến để lưu trữ id phòng đã chọn
+ 
+     // Lắng nghe sự kiện khi click vào một thời gian chiếu khác
+     document.getElementById('ThoiGianChieu').addEventListener('change', function() {
+         let thoiGianChieuValue = this.value;
+         let selectedPhimId = document.getElementById('idPhim').value;
+ 
+         // Sử dụng AJAX để lấy danh sách phòng chiếu theo thời gian và phim đã chọn
+         $.ajax({
+             url: '/api/getdanhsachphongtheokhoangtrong/' + thoiGianChieuValue + '/' + selectedPhimId,
+             type: 'GET',
+             dataType: 'json',
+             success: function(data) {
+                 let danhmucs = data.phongchieu;
+                 let danhmucList = $('#phim-list');
+                 danhmucList.empty();
+                 danhmucs.forEach(function(phim) {
+                     danhmucList.append(`<tr>
+                        <td>${phim.idPhongChieu}</td>
+                        <td>${phim.TenPhong}</td>
+                        <td><a href="" data-id="${phim.idPhongChieu}" data-toggle="modal" data-target="#updateModal"  data-ten="${phim.TenPhong}" class="chon">Chọn</a></td>
+                        </tr>`);
+                 });
+             }
+         });
+     });
+ 
+     // Lắng nghe sự kiện khi chọn một phim khác
+     document.getElementById('idPhim').addEventListener('change', function() {
+         let selectedPhimId = this.value;
+         let thoiGianChieuValue = document.getElementById('ThoiGianChieu').value;
+ 
+         // Sử dụng AJAX để lấy danh sách phòng chiếu theo thời gian và phim đã chọn
+         $.ajax({
+             url: '/api/getdanhsachphongtheokhoangtrong/' + thoiGianChieuValue + '/' + selectedPhimId,
+             type: 'GET',
+             dataType: 'json',
+             success: function(data) {
+                 let danhmucs = data.phongchieu;
+                 let danhmucList = $('#phim-list');
+                 danhmucList.empty();
+                 danhmucs.forEach(function(phim) {
+                    danhmucList.append(`<tr>
+                        <td>${phim.idPhongChieu}</td>
+                        <td>${phim.TenPhong}</td>
+                        <td><a href="" data-id="${phim.idPhongChieu}" data-toggle="modal" data-target="#updateModal"  data-ten="${phim.TenPhong}" class="chon">Chọn</a></td>
+                        </tr>`);
+                 });
+                 let phims=data.phim;
+                 let phimlist=$('#phim');
 
-            $.ajax({
-                url: "{{ route('create_nhanvien') }}",
-                type: 'POST',
-                data: formData,
-                processData: false, // Ngăn xử lý dữ liệu gửi đi
-                contentType: false, // Không thiết lập kiểu dữ liệu
-                success: function(res) {
-                    console.log(res);
-                    alert(res.message);
-                    window.location.href = document.referrer;
-                },error:function(er)
-                    {
-                        let err=er.responseJSON;
-                        $.each(err.errors,function(index,value){
-                            $('.errorMessage').append('<span class="text-danger">'+value+'</span><br/>  ')
-                        });
-                    }
-            });
-        });
-    });
-</script>
+
+             }
+         });
+     });
+ 
+     // Lắng nghe sự kiện khi click vào một phòng chiếu
+     $(document).on('click', 'a.chon', function(e) {
+         e.preventDefault();
+         $('a.chon').removeClass('chosen');
+         $(this).addClass('chosen');
+         idphong = $(this).attr('data-id');
+     });
+ 
+     // Lắng nghe sự kiện khi click vào nút "Thêm"
+     $(document).on('click', '.add', function(event) {
+         event.preventDefault();
+         let thoiGianChieuValue = document.getElementById('ThoiGianChieu').value;
+         let selectedPhimId = document.getElementById('idPhim').value;
+    
+ 
+         // Sử dụng AJAX để gửi dữ liệu đến controller để tạo lịch chiếu mới
+         $.ajax({
+             url: "{{ route('create_lichchieu') }}",
+             method: 'POST',
+             data: {
+                 thoiGianChieuValue: thoiGianChieuValue,
+                 selectedPhimId: selectedPhimId,
+                 idphong: idphong,
+              
+             },
+             success: function(res) {
+                 alert(res.message);
+                 window.location.href = document.referrer;
+             }
+         });
+     });
+ });
+ 
+ </script>
 @endsection

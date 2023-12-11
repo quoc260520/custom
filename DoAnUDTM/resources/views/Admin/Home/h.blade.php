@@ -6,7 +6,8 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-12 p-md-0">
                     <div class="welcome-text">
-                        <center><h4>Quản Lý Hóa Đơn</h4></center>
+                        <center><h4>Quản Lý Lịch Chiếu</h4></center>
+                        
                     </div>
                 </div>
                
@@ -16,20 +17,20 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <a class="btn btn-primary" href="{{ route('get_create_nhanvien') }}">Thêm Nhân Viên </a>
+                            <a class="btn btn-primary" href="{{ route('get_create_lichchieu') }}">Thêm Lịch Chiếu </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="dataTables-hoadon" class="display" style="width: 1360px;color:black;">
+                                <table id="dataTables-lichchieu" class="display" style="width: 1360px;color:black;">
                                     <thead>
                                         <tr>
-                                            <th>Tên Khách Hàng</th>
-                                            <th>Số Điện Thoại</th>
-                                            <th>Ngày Mua</th>
-                                            <th>Tổng Vé</th>
-                                            <th>Tổng Tiền</th>    
-                                            <th>Tình Trạng</th>     
-                                            <th>Trạng Thái</th>    
+                                            <th>Mã Lịch Chiếu</th>
+                                            <th>Thời Gian Chiếu</th>
+                                            <th>Thời Gian Kết Thúc</th>
+                                            <th>Tên Phòng Chiếu</th>    
+                                            <th>Tên Phim</th>                              
+                                            <th>#</th>
+                                            <th>#</th>
                                         </tr>
                                     </thead>
                                     <tbody>

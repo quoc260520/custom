@@ -7,6 +7,9 @@ use App\Models\KhachHang;
 use App\Models\NguoiDung;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 class KhachHangController extends Controller
 {
@@ -31,6 +34,43 @@ class KhachHangController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function getthongtincanhan()
+    {
+        $thongtin=KhachHang::where('idTK',Auth::user()->id)->first();
+        return view('Home.ThongTinCaNhan',['thongtin'=>$thongtin]);
+    }
+    public function capnhathongtin(Request $request)
+    {
+        $thongtin=KhachHang::where('idTK',Auth::user()->id)->first();
+        $thongtin->HoTen=$request->hoten;
+        $thongtin->Email=$request->email;
+        $thongtin->NgaySinh=$request->ngaysinh;
+        $thongtin->DiaChi=$request->diachi;
+        $thongtin->SDT=$request->sdt;
+        $thongtin->save();
+        return redirect('/thongtincanhan');
+    }
+    public function getdoimatkhau()
+    {
+        
+        return view('Home.DoiMatKhau');
+    }
+    public function updatematkhau(Request $request)
+    {
+        if (Hash::check($request->matkhauhientai,Auth::user()->MatKhau)) {            
+            //cái nàm này là 1 pas 1 hash pass ha gì mà
+            // Đăng nhập thành công
+            DB::table('taikhoan')
+            ->where('id',Auth::user()->id )
+            ->update([
+            'MatKhau' => bcrypt($request->matkhaumoi),
+     
+        ]);
+        Auth::guard("web")->logout();
+        return redirect('/');
+        
+    }
+}
     public function get_create()
     {
         return view('KhachHang.KhachHang_create');

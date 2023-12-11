@@ -17,8 +17,4 @@ class ChiTietThucAn extends Model
         'MAHOADON',
         'SOLUONG'
     ];
-    public function thucAn()
-    {
-        return $this->belongsTo(ThucAn::class, 'MATHUCAN', 'MATHUCAN');
-    }
 }

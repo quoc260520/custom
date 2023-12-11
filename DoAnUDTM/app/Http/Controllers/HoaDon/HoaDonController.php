@@ -4,7 +4,9 @@ namespace App\Http\Controllers\HoaDon;
 
 use App\Http\Controllers\Controller;
 use App\Models\HoaDon;
+use App\Models\NhanVien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class HoaDonController extends Controller
@@ -22,24 +24,45 @@ class HoaDonController extends Controller
                     ->get();
         return response()->json($hoadon);
     }
+    public function thongtinxuatpdf($id)
+    {
+        $hoadon = HoaDon::join('ChiTietVe', 'ChiTietVe.MAHOADON', '=', 'HoaDon.MAHOADON')
+        ->join('Ve', 'Ve.idVe', '=', 'ChiTietVe.idVe')
+        ->select('HoaDon.*', 'Ve.idVe', 'Ve.MaGheNgoi','ChiTietVe.GiaVe')
+        ->where('HoaDon.MAHOADON', '=', $id)
+        ->get();
+    
+        return $hoadon;
+    }
     public function nhanve($id)
     {
         $hoadon = HoaDon::where('MAHOADON', $id)->first(); 
-
         if ($hoadon) {
             
             $hoadon->TinhTrang = 1; 
-            
+            $nhanvien=NhanVien::where('idTK',Auth::user()->id)->first();
+            $hoadon->MANHANVIEN=$nhanvien->idNhanVien;
             $hoadon->save(); 
 
-           
+            $data = HoaDon::join('ChiTietVe', 'ChiTietVe.MAHOADON', '=', 'HoaDon.MAHOADON')
+            ->join('Ve', 'Ve.idVe', '=', 'ChiTietVe.idVe')
+            ->select('HoaDon.*', 'Ve.idVe', 'Ve.MaGheNgoi','ChiTietVe.GiaVe')
+            ->where('HoaDon.MAHOADON', '=', $id)
+            ->get();
+     
+            $pdf = app('dompdf.wrapper')->loadView('PDF.test', compact('data'));
+    
+            return $pdf->stream('document.pdf');
             return back();
         } else {
            
             return "Không tìm thấy hóa đơn với MAHOADON = $id";
         }
     }
-
+    public function getlichsumua(){
+        $lsmuahang=HoaDon::where('MAKHACHHANG',Auth::user()->id)->get();
+        return view('Home.LichSuMuaHang',['lsmuahang'=>$lsmuahang]);
+    }
     /**
      * Show the form for creating a new resource.
      *

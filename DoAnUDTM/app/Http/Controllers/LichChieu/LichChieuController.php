@@ -58,10 +58,14 @@ class LichChieuController extends Controller
         $phim = Phim::where('idPhim', $idphim)->first();
         // Tính thời gian kết thúc dựa trên thời gian chiếu và thời lượng phim
         $thoiGianChieu = DateTime::createFromFormat('Y-m-d H:i', $thoiGianChieu);
+       
         $thoiGianKetThuc = clone $thoiGianChieu;
         $thoiGianKetThuc->add(new DateInterval('PT' . ($phim->ThoiLuong + 10) . 'M'));
         $currentDateTimeDB = $thoiGianChieu->format('Y-m-d H:i:s');
         $currentDateTimeKT= $thoiGianKetThuc->format('Y-m-d H:i:s');
+
+        
+    
         // Lấy danh sách phòng không có lịch chiếu trong khoảng thời gian chỉ định
         $phongChieus = PhongChieu::whereNotExists(function ($query) use ($currentDateTimeDB, $currentDateTimeKT) {
             $query->select(DB::raw(1))
@@ -82,9 +86,12 @@ class LichChieuController extends Controller
         })->
         where('idManHinh',$phim->idMH)->get();
         
-        
+        $lichChieus = LichChieu::selectRaw('TIME(ThoiGianChieu) as ThoiGianChieu, TIME(ThoiGianKetThuc) as ThoiGianKetThuc, idPhong,idLichChieu')
+        ->where('idPhim', $idphim)
+      
+        ->get();
     
-        return response()->json(['phongchieu' => $phongChieus]);
+        return response()->json(['phongchieu' => $phongChieus,'phims'=>$phim]);
     }
     
     
@@ -114,14 +121,14 @@ class LichChieuController extends Controller
                 $phim = new LichChieu();
                 $phim->ThoiGianChieu = $currentDateTimeDB;
                 $phim->ThoiGianKetThuc = $currentDateTimeKT;
-                $phim->GiaVe = $request->GiaVe;
+          
                 $phim->idPhong = $request->idphong;
                 $phim->idPhim = $request->selectedPhimId;
             
                 // Bắt đầu try cho phần save
                 try {
                     $phim->save();
-                    return response()->json(['message' => 'Thêm lịch chiếu thành công'], 200);
+                    return response()->json(['message' => 'Thêm lịch chiếu thành công']);
                 } catch (Exception $e) {
                     // Xử lý ngoại lệ khi save thất bại
                     return response()->json(['message' => 'Lưu lịch chiếu thất bại', 'error' => $e->getMessage()], 500);

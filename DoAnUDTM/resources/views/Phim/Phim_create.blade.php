@@ -37,7 +37,7 @@
                                     <label class="col-md-2" for="TenPhim">Mô Tả</label>
                                     <div class="col-md-10">
                                         <div class="">
-                                            <textarea cols="20"  id="MoTa" name="MoTa" rows="2"></textarea>
+                                            <textarea cols="170"  id="MoTa" name="MoTa" rows="7"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -64,6 +64,7 @@
                                         <div class="">
                                             <input class="form-control text-box single-line" type="text" id="HangSanXuat" value="" name="HangSanXuat" placeholder="Hãng Sản Xuất">
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -119,7 +120,15 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button type="submit">Thêm</button>
+                                <div class="form-group">
+                                    <label class="col-md-2" for="TenPhim">Đơn Giá</label>
+                                    <div class="col-md-10">
+                                        <div class="">
+                                            <input class="form-control text-box single-line" type="number" id="DonGia" value="" name="DonGia" placeholder="Nhập Giá">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" type="submit">Thêm</button>
                             </form>
 
                         </div>

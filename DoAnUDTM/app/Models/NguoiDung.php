@@ -9,10 +9,11 @@ class NguoiDung extends Authenticatable
 {
     use HasFactory;
     protected $table='taikhoan';
-    protected $username = 'TenDangNhap';
+    protected $username = 'TenDangNhap'; 
     protected $password = 'MatKhau';
     public $timestamps = false;
     protected $fillable = [
+        'id',
         'TenDangNhap',
         'MatKhau',
         'TinhTrang'

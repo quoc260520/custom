@@ -24,7 +24,7 @@
                             <div class="cate">
                                 <span class="blue"><a href="">Thời Lượng: {{ $item->ThoiLuong }} Phút</a></span>
                             </div>
-                            <h6><a href="">{{ $item->TenPhim }}</a></h6>
+                            <h6><a href="{{ route('detailphim',['id'=>$item->idPhim]) }}">{{ $item->TenPhim }}</a></h6>
                             <p><i class="ion-android-star"></i><span>7.4</span> /10</p>
                         </div>
                     </div>
